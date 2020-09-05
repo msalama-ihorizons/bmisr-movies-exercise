@@ -24,7 +24,12 @@ class MoviesAdapter(context: Context, listener: OnRecyclerItemClickListener) : G
     }
 
 
-    inner class MovieViewHolder(itemView: View, listener: OnRecyclerItemClickListener?) : BaseViewHolder<Movie, OnRecyclerItemClickListener>(itemView, listener) {
+    inner class MovieViewHolder(itemView: View, listener: OnRecyclerItemClickListener?) :
+        BaseViewHolder<Movie, OnRecyclerItemClickListener>(itemView, listener), View.OnClickListener {
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         override fun onBind(item: Movie) {
             itemView.movieTitle.text = item.title
@@ -37,6 +42,10 @@ class MoviesAdapter(context: Context, listener: OnRecyclerItemClickListener) : G
                 Glide.with(it).load(posterUrl)
                     .into(itemView.moviePoster)
             }
+        }
+
+        override fun onClick(p0: View?) {
+            listener?.onItemClick(adapterPosition)
         }
     }
 }

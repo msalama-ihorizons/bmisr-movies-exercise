@@ -11,6 +11,6 @@ class MoviesViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val moviesList = moviesRepository.loadPlayingNowMovies()
+    val moviesListLiveData = moviesRepository.loadPlayingNowMovies()
 
 }
