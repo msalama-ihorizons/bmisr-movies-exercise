@@ -29,6 +29,23 @@ class MoviesRepository @Inject constructor(
         }
     }
 
+    fun loadSimilarMovies(movieId: Int): LiveData<Resource<List<Movie>>> {
+
+        return liveData {
+            emit(Resource.loading(null))
+
+            val result = moviesApis.getSimilarMovies(movieId = movieId, apiKey = API_KEY)
+
+            emit(Resource.complete(null))
+
+            if (result.isSuccessful)
+                emit(Resource.success(result.body()?.movies?.sortedBy { it.title }))
+            else
+                emit(Resource.error(result.message(), null))
+
+        }
+    }
+
     fun loadMovieDetails(movieId: Int): LiveData<Resource<Movie>> {
 
         return liveData {

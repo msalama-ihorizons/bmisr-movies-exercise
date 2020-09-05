@@ -20,6 +20,12 @@ interface MoviesApis {
         @Query("api_key") apiKey: String
     ): Response<CreditsResponse>
 
+    @GET("movie/{movie_id}/similar")
+    suspend fun getSimilarMovies(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Response<MoviesResponse>
+
     @GET("authentication/guest_session/new")
     suspend fun generateGuestSession(@Query("api_key") apiKey: String): Response<GuestSessionResponse>
 

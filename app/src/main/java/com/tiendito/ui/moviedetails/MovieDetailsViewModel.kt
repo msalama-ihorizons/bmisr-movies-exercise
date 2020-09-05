@@ -14,21 +14,25 @@ class MovieDetailsViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle?
 ) : ViewModel() {
 
-    private val movieID = savedStateHandle?.getLiveData<Int>(EXTRA_MOVIE_ID)
+    private val movieIDLiveData = savedStateHandle?.getLiveData<Int>(EXTRA_MOVIE_ID)
 
     private val ratingValueLiveData = MutableLiveData<Float>()
 
-    val movieDetailsLiveData = movieID?.switchMap { movieID ->
+    val movieDetailsLiveData = movieIDLiveData?.switchMap { movieID ->
         moviesRepository.loadMovieDetails(movieID)
     }
 
-    val movieCastLiveData = movieID?.switchMap { movieID ->
+    val movieCastLiveData = movieIDLiveData?.switchMap { movieID ->
         moviesRepository.loadMovieCast(movieID)
+    }
+
+    val similarMoviesLiveData = movieIDLiveData?.switchMap { movieID ->
+        moviesRepository.loadSimilarMovies(movieID)
     }
 
     val ratingMovieLiveData = ratingValueLiveData.switchMap { ratingValue ->
         moviesRepository.rateMovie(
-            movieId = movieID?.value!!,
+            movieId = movieIDLiveData?.value!!,
             ratingValue = ratingValue
         )
     }

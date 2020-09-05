@@ -36,6 +36,11 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         setContentView(R.layout.movie_details_activity)
 
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+
         ratingBar.onRatingBarChangeListener =
             OnRatingBarChangeListener { ratingBar, rating, fromUser ->
                 moviesDetailsViewModel.rateMovie(rating)
@@ -48,6 +53,8 @@ class MovieDetailsActivity : AppCompatActivity() {
                     val movie = resources.data
 
                     movie?.let {
+                        title = it.title
+
                         val posterUrl = getString(R.string.movie_poster_url, it.backdropPath)
                         Glide.with(this).load(posterUrl)
                             .into(moviePoster)
@@ -75,5 +82,10 @@ class MovieDetailsActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

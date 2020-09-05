@@ -11,7 +11,7 @@ import com.tiendito.api.Movie
 import com.tiendito.bmisrmovies.R
 import kotlinx.android.synthetic.main.movie_item.view.*
 
-class MoviesAdapter(context: Context, listener: OnRecyclerItemClickListener) : GenericRecyclerViewAdapter<Movie, OnRecyclerItemClickListener, MoviesAdapter.MovieViewHolder>(context, listener) {
+class MoviesAdapter(context: Context?, listener: OnRecyclerItemClickListener) : GenericRecyclerViewAdapter<Movie, OnRecyclerItemClickListener, MoviesAdapter.MovieViewHolder>(context, listener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(inflate(R.layout.movie_item, parent), listener)
