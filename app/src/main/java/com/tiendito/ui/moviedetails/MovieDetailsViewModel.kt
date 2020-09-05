@@ -2,6 +2,7 @@ package com.tiendito.ui.moviedetails
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
@@ -15,11 +16,24 @@ class MovieDetailsViewModel @ViewModelInject constructor(
 
     private val movieID = savedStateHandle?.getLiveData<Int>(EXTRA_MOVIE_ID)
 
-    val movieDetailsLiveData = movieID?.switchMap {
-            movieID->   moviesRepository.loadMovieDetails(movieID)
+    private val ratingValueLiveData = MutableLiveData<Float>()
+
+    val movieDetailsLiveData = movieID?.switchMap { movieID ->
+        moviesRepository.loadMovieDetails(movieID)
     }
 
-    val movieCastLiveData = movieID?.switchMap {
-            movieID->   moviesRepository.loadMovieCast(movieID)
+    val movieCastLiveData = movieID?.switchMap { movieID ->
+        moviesRepository.loadMovieCast(movieID)
+    }
+
+    val ratingMovieLiveData = ratingValueLiveData.switchMap { ratingValue ->
+        moviesRepository.rateMovie(
+            movieId = movieID?.value!!,
+            ratingValue = ratingValue
+        )
+    }
+
+    fun rateMovie(rateValue: Float) {
+        ratingValueLiveData.value = rateValue
     }
 }

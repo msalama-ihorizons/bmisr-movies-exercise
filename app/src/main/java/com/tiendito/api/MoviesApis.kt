@@ -1,9 +1,7 @@
 package com.tiendito.api
 
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MoviesApis {
 
@@ -22,4 +20,15 @@ interface MoviesApis {
         @Query("api_key") apiKey: String
     ): Response<CreditsResponse>
 
+    @GET("authentication/guest_session/new")
+    suspend fun generateGuestSession(@Query("api_key") apiKey: String): Response<GuestSessionResponse>
+
+    @POST("movie/{movie_id}/rating")
+    suspend fun rateMovie(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("guest_session_id") guestSessionId: String,
+        @Body rateRequest: RateRequest
+
+    ): Response<RateResponse>
 }

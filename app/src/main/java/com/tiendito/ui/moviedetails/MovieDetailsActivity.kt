@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.RatingBar.OnRatingBarChangeListener
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +12,9 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.tiendito.bmisrmovies.R
 import com.tiendito.model.Status
-import com.tiendito.ui.movieslist.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.movie_details_activity.*
-import kotlinx.android.synthetic.main.movie_item.view.*
+
 
 @AndroidEntryPoint
 class MovieDetailsActivity : AppCompatActivity() {
@@ -35,6 +35,11 @@ class MovieDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.movie_details_activity)
+
+        ratingBar.onRatingBarChangeListener =
+            OnRatingBarChangeListener { ratingBar, rating, fromUser ->
+                moviesDetailsViewModel.rateMovie(rating)
+            }
 
         moviesDetailsViewModel.movieDetailsLiveData?.observe(this, Observer { resources ->
 
@@ -59,6 +64,16 @@ class MovieDetailsActivity : AppCompatActivity() {
                 Status.LOADING ->  progressBar.visibility = View.VISIBLE
                 Status.COMPLETE -> progressBar.visibility = View.GONE
             }
+        })
+
+        moviesDetailsViewModel.ratingMovieLiveData.observe(this, Observer {resources->
+            when(resources.status) {
+                Status.SUCCESS -> Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
+                Status.ERROR -> Toast.makeText(this, "Fail", Toast.LENGTH_LONG).show()
+                Status.LOADING -> progressBar.visibility = View.VISIBLE
+                Status.COMPLETE -> progressBar.visibility = View.GONE
+            }
+
         })
     }
 }
