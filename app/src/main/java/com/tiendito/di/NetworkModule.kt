@@ -2,6 +2,7 @@ package com.tiendito.di
 
 
 import com.tiendito.api.MoviesApis
+import com.tiendito.utils.Constants.API_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,7 @@ object NetworkModule {
     fun provideFlickerService(): MoviesApis {
 
         return Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MoviesApis::class.java)

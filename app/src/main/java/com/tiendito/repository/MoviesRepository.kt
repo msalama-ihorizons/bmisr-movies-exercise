@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import com.tiendito.api.Movie
 import com.tiendito.api.MoviesApis
 import com.tiendito.model.Resource
+import com.tiendito.utils.Constants.API_KEY
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(private val moviesApis: MoviesApis) {
@@ -14,17 +15,15 @@ class MoviesRepository @Inject constructor(private val moviesApis: MoviesApis) {
         return liveData {
             emit(Resource.loading(null))
 
-            val result = moviesApis.getNowPlayingMovies(
-                "b7d7973004e15ed98d3cce467b8ee646"
-            )
+            val result = moviesApis.getNowPlayingMovies(API_KEY)
+
+            emit(Resource.complete(null))
 
             if (result.isSuccessful)
-                emit(Resource.success(result.body()?.movies))
+                emit(Resource.success(result.body()?.movies?.sortedBy { it.title }))
             else
                 emit(Resource.error(result.message(), null))
 
-
-            emit(Resource.complete(null))
         }
     }
 }

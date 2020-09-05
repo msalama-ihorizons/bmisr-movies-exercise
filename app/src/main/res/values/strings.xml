@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BMisrMovies</string>
+    <string name="movie_poster_url">https://image.tmdb.org/t/p/w500%s</string>
+
 </resources>
