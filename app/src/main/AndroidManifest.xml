@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.tiendito.ui.moviedetails.MovieDetailsActivity" />
+        <activity android:name="com.tiendito.ui.favourites.FavouritesMoviesActivity" />
     </application>
 
 </manifest>

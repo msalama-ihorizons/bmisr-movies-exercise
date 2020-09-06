@@ -13,4 +13,6 @@ class MoviesViewModel @ViewModelInject constructor(
 
     val moviesListLiveData = moviesRepository.loadPlayingNowMovies()
 
+    val favMoviesListLiveData = moviesRepository.loadFavouriteMovies()
+
 }

@@ -15,10 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
 
-    private val moviesViewModel: MoviesViewModel by viewModels()
-    private lateinit var moviesAdapter: MoviesAdapter
+    protected val moviesViewModel: MoviesViewModel by viewModels()
+    protected lateinit var moviesAdapter: MoviesAdapter
 
     companion object {
         private const val NUMBER_OF_COL = 3
@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         moviesRV.layoutManager = GridLayoutManager(this, NUMBER_OF_COL)
         moviesRV.adapter = moviesAdapter
 
+        handleObservers()
+    }
+
+    open fun handleObservers() {
         moviesViewModel.moviesListLiveData.observe(this, Observer { resources ->
             when (resources.status) {
                 Status.SUCCESS -> moviesAdapter.items = resources.data

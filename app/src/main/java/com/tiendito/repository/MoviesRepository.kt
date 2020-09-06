@@ -1,15 +1,19 @@
 package com.tiendito.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.liveData
 import com.tiendito.api.*
+import com.tiendito.db.MoviesDao
 import com.tiendito.model.Resource
 import com.tiendito.utils.Constants.API_KEY
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(
     private val moviesApis: MoviesApis,
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
+    private val moviesDao: MoviesDao
+
 ) {
 
     fun loadPlayingNowMovies(): LiveData<Resource<List<Movie>>> {
@@ -107,5 +111,41 @@ class MoviesRepository @Inject constructor(
             else
                 emit(Resource.error(result.message(), null))
         }
+    }
+
+    suspend fun addFavouriteMovie(isFavourite: Boolean, movie: Movie?) {
+        if (isFavourite)
+            moviesDao.insert(movie)
+        else
+            moviesDao.deleteMovie(movie?.id)
+    }
+
+    fun isFavouriteMovie(movieId: Int): LiveData<Boolean> {
+
+        val resultLiveData = MediatorLiveData<Boolean>()
+
+        resultLiveData.addSource(moviesDao.loadMovieById(movieId)) { movie ->
+            movie?.let {
+                resultLiveData.value = true
+                return@addSource
+            }
+            resultLiveData.value = false
+
+        }
+
+        return resultLiveData
+    }
+
+    fun loadFavouriteMovies(): LiveData<Resource<List<Movie>>> {
+        val resultLiveData = MediatorLiveData<Resource<List<Movie>>>()
+        resultLiveData.value  = Resource.loading(null)
+
+        resultLiveData.addSource(moviesDao.loadMovies()) {
+            movies->
+            resultLiveData.value = Resource.complete(null)
+
+            resultLiveData.value = Resource.success(movies)
+        }
+        return resultLiveData
     }
 }

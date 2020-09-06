@@ -10,16 +10,21 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.like.LikeButton
+import com.like.OnLikeListener
+import com.tiendito.api.Movie
 import com.tiendito.bmisrmovies.R
 import com.tiendito.model.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.movie_details_activity.*
+import java.util.*
 
 
 @AndroidEntryPoint
 class MovieDetailsActivity : AppCompatActivity() {
 
     private val moviesDetailsViewModel: MovieDetailsViewModel by viewModels()
+    private var movie: Movie? = null
 
     companion object {
         const val EXTRA_MOVIE_ID = "extraMovieID"
@@ -46,11 +51,22 @@ class MovieDetailsActivity : AppCompatActivity() {
                 moviesDetailsViewModel.rateMovie(rating)
             }
 
+        btnAddToFav.setOnLikeListener(object : OnLikeListener {
+            override fun liked(likeButton: LikeButton?) {
+                moviesDetailsViewModel.addToFavourites(true, movie)
+            }
+
+            override fun unLiked(likeButton: LikeButton?) {
+                moviesDetailsViewModel.addToFavourites(false, movie)
+            }
+
+        })
+
         moviesDetailsViewModel.movieDetailsLiveData?.observe(this, Observer { resources ->
 
             when (resources.status) {
                 Status.SUCCESS -> {
-                    val movie = resources.data
+                    movie = resources.data
 
                     movie?.let {
                         title = it.title
@@ -68,19 +84,23 @@ class MovieDetailsActivity : AppCompatActivity() {
 
                 }
                 Status.ERROR -> Toast.makeText(this, resources.message, Toast.LENGTH_LONG).show()
-                Status.LOADING ->  progressBar.visibility = View.VISIBLE
+                Status.LOADING -> progressBar.visibility = View.VISIBLE
                 Status.COMPLETE -> progressBar.visibility = View.GONE
             }
         })
 
-        moviesDetailsViewModel.ratingMovieLiveData.observe(this, Observer {resources->
-            when(resources.status) {
+        moviesDetailsViewModel.ratingMovieLiveData.observe(this, Observer { resources ->
+            when (resources.status) {
                 Status.SUCCESS -> Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
                 Status.ERROR -> Toast.makeText(this, "Fail", Toast.LENGTH_LONG).show()
                 Status.LOADING -> progressBar.visibility = View.VISIBLE
                 Status.COMPLETE -> progressBar.visibility = View.GONE
             }
 
+        })
+
+        moviesDetailsViewModel.favouriteMovieLiveDate?.observe(this, Observer {
+            btnAddToFav.isLiked = it
         })
     }
 

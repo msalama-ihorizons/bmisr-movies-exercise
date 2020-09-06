@@ -2,12 +2,11 @@ package com.tiendito.ui.moviedetails
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
+import com.tiendito.api.Movie
 import com.tiendito.repository.MoviesRepository
 import com.tiendito.ui.moviedetails.MovieDetailsActivity.Companion.EXTRA_MOVIE_ID
+import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel @ViewModelInject constructor(
     private val moviesRepository: MoviesRepository,
@@ -30,6 +29,8 @@ class MovieDetailsViewModel @ViewModelInject constructor(
         moviesRepository.loadSimilarMovies(movieID)
     }
 
+
+    // Rate Movie LiveData
     val ratingMovieLiveData = ratingValueLiveData.switchMap { ratingValue ->
         moviesRepository.rateMovie(
             movieId = movieIDLiveData?.value!!,
@@ -39,5 +40,15 @@ class MovieDetailsViewModel @ViewModelInject constructor(
 
     fun rateMovie(rateValue: Float) {
         ratingValueLiveData.value = rateValue
+    }
+
+    val favouriteMovieLiveDate = movieIDLiveData?.switchMap { movieID ->
+        moviesRepository.isFavouriteMovie(movieID)
+    }
+
+    fun addToFavourites(isFavourite: Boolean, movie: Movie?) {
+        viewModelScope.launch {
+            moviesRepository.addFavouriteMovie(isFavourite, movie)
+        }
     }
 }

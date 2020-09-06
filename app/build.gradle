@@ -119,6 +119,9 @@ dependencies {
     def genericAdapterVersion = '1.0.1'
     implementation "com.leodroidcoder:generic-adapter:$genericAdapterVersion"
 
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
+
     def mock_web_server_version = '4.8.1'
     testImplementation "com.squareup.okhttp3:mockwebserver:$mock_web_server_version"
 

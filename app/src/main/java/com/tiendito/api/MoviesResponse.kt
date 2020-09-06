@@ -1,5 +1,7 @@
 package com.tiendito.api
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class MoviesResponse(@SerializedName("results") val movies: List<Movie>)
@@ -7,8 +9,9 @@ data class MoviesResponse(@SerializedName("results") val movies: List<Movie>)
 data class Genre(val id: Int, val name: String)
 
 
+@Entity(tableName = "movies_table")
 data class Movie(
-    @SerializedName("id") val id: Int,
+    @PrimaryKey val id: Int,
     @SerializedName("title") val title: String,
     @SerializedName("release_date") val releaseDate: String,
     @SerializedName("vote_average") val voteAverage: Double,
