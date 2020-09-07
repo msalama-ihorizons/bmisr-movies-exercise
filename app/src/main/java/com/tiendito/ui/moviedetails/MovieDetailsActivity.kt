@@ -3,6 +3,7 @@ package com.tiendito.ui.moviedetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.RatingBar.OnRatingBarChangeListener
 import android.widget.Toast
@@ -10,6 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
+import com.iarcuschin.simpleratingbar.SimpleRatingBar
+import com.irozon.sneaker.Sneaker
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.tiendito.api.Movie
@@ -46,10 +50,24 @@ class MovieDetailsActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
         }
 
-        ratingBar.onRatingBarChangeListener =
-            OnRatingBarChangeListener { ratingBar, rating, fromUser ->
+        handleActions()
+
+        handleObservers()
+    }
+
+    private fun handleActions() {
+
+        ratingBar.setOnRatingBarChangeListener(object : SimpleRatingBar.OnRatingBarChangeListener {
+            override fun onRatingChanged(
+                simpleRatingBar: SimpleRatingBar?,
+                rating: Float,
+                fromUser: Boolean
+            ) {
                 moviesDetailsViewModel.rateMovie(rating)
             }
+
+        })
+
 
         btnAddToFav.setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton?) {
@@ -62,6 +80,9 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         })
 
+    }
+
+    private fun handleObservers() {
         moviesDetailsViewModel.movieDetailsLiveData?.observe(this, Observer { resources ->
 
             when (resources.status) {
@@ -79,6 +100,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                         movieOverView.text = it.overview
                         movieVoteAverage.text = it.voteAverage.toString()
                         movieReleaseDate.text = it.releaseDate
+                        movieGenres.text = TextUtils.join(", ", it.genres.map { genre-> genre.name })
                     }
 
 
@@ -91,8 +113,14 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         moviesDetailsViewModel.ratingMovieLiveData.observe(this, Observer { resources ->
             when (resources.status) {
-                Status.SUCCESS -> Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
-                Status.ERROR -> Toast.makeText(this, "Fail", Toast.LENGTH_LONG).show()
+                Status.SUCCESS ->  Sneaker.with(this)
+                    .setTitle("Success")
+                    .setMessage("Rating is submitted!")
+                    .sneakSuccess()
+                Status.ERROR ->  Sneaker.with(this)
+                    .setTitle("Error")
+                    .setMessage("There is an error, please try again later")
+                    .sneakError()
                 Status.LOADING -> progressBar.visibility = View.VISIBLE
                 Status.COMPLETE -> progressBar.visibility = View.GONE
             }

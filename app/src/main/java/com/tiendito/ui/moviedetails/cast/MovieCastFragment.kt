@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.leodroidcoder.genericadapter.OnRecyclerItemClickListener
 import com.tiendito.bmisrmovies.R
 import com.tiendito.model.Status
+import com.tiendito.ui.adpater.MovieCastAdapter
 import com.tiendito.ui.moviedetails.MovieDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.movie_cast_fragment.*
@@ -28,9 +29,11 @@ class MovieCastFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        movieCastAdapter = MovieCastAdapter(context, OnRecyclerItemClickListener {
+        movieCastAdapter = MovieCastAdapter(
+            context,
+            OnRecyclerItemClickListener {
 
-        })
+            })
     }
 
     override fun onCreateView(

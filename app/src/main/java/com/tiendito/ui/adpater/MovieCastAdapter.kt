@@ -1,4 +1,4 @@
-package com.tiendito.ui.moviedetails.cast
+package com.tiendito.ui.adpater
 
 import android.content.Context
 import android.view.View

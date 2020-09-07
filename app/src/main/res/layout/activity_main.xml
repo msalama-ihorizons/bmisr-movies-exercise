@@ -6,18 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/moviesRV"
+    <fragment
+        android:id="@+id/movies_list_fragment"
+        android:name="com.tiendito.ui.movieslist.MoviesListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        tools:listitem="@layout/movie_item" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+        tools:layout="@layout/movies_list_fragment"/>
 
 </FrameLayout>

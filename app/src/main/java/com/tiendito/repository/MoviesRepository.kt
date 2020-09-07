@@ -7,6 +7,7 @@ import com.tiendito.api.*
 import com.tiendito.db.MoviesDao
 import com.tiendito.model.Resource
 import com.tiendito.utils.Constants.API_KEY
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(
@@ -21,14 +22,20 @@ class MoviesRepository @Inject constructor(
         return liveData {
             emit(Resource.loading(null))
 
-            val result = moviesApis.getNowPlayingMovies(apiKey = API_KEY)
+            try {
+                val result = moviesApis.getNowPlayingMovies(apiKey = API_KEY)
 
-            emit(Resource.complete(null))
+                emit(Resource.complete(null))
 
-            if (result.isSuccessful)
-                emit(Resource.success(result.body()?.movies?.sortedBy { it.title }))
-            else
-                emit(Resource.error(result.message(), null))
+                if (result.isSuccessful)
+                    emit(Resource.success(result.body()?.movies?.sortedBy { it.title }))
+                else
+                    emit(Resource.error(result.message(), null))
+
+            } catch (e: Exception) {
+                emit(Resource.complete(null))
+                emit(Resource.error(e.message, null))
+            }
 
         }
     }
@@ -38,14 +45,21 @@ class MoviesRepository @Inject constructor(
         return liveData {
             emit(Resource.loading(null))
 
-            val result = moviesApis.getSimilarMovies(movieId = movieId, apiKey = API_KEY)
+            try {
+                val result = moviesApis.getSimilarMovies(movieId = movieId, apiKey = API_KEY)
 
-            emit(Resource.complete(null))
+                emit(Resource.complete(null))
 
-            if (result.isSuccessful)
-                emit(Resource.success(result.body()?.movies?.sortedBy { it.title }))
-            else
-                emit(Resource.error(result.message(), null))
+                if (result.isSuccessful)
+                    emit(Resource.success(result.body()?.movies?.sortedBy { it.title }))
+                else
+                    emit(Resource.error(result.message(), null))
+
+            } catch (e: Exception) {
+                emit(Resource.complete(null))
+                emit(Resource.error(e.message, null))
+            }
+
 
         }
     }
@@ -56,14 +70,21 @@ class MoviesRepository @Inject constructor(
 
             emit(Resource.loading(null))
 
-            val result = moviesApis.getMovieDetails(movieId = movieId, apiKey = API_KEY)
+            try {
+                val result = moviesApis.getMovieDetails(movieId = movieId, apiKey = API_KEY)
 
-            emit(Resource.complete(null))
+                emit(Resource.complete(null))
 
-            if (result.isSuccessful)
-                emit(Resource.success(result.body()))
-            else
-                emit(Resource.error(result.message(), null))
+                if (result.isSuccessful)
+                    emit(Resource.success(result.body()))
+                else
+                    emit(Resource.error(result.message(), null))
+
+            } catch (e: Exception) {
+                emit(Resource.complete(null))
+                emit(Resource.error(e.message, null))
+            }
+
 
         }
     }
@@ -74,22 +95,28 @@ class MoviesRepository @Inject constructor(
 
             emit(Resource.loading(null))
 
-            val result = moviesApis.getMovieCast(movieId = movieId, apiKey = API_KEY)
+            try {
+                val result = moviesApis.getMovieCast(movieId = movieId, apiKey = API_KEY)
 
-            emit(Resource.complete(null))
+                emit(Resource.complete(null))
 
-            if (result.isSuccessful)
-                emit(Resource.success(result.body()?.cast))
-            else
-                emit(Resource.error(result.message(), null))
+                if (result.isSuccessful)
+                    emit(Resource.success(result.body()?.cast))
+                else
+                    emit(Resource.error(result.message(), null))
+            }catch (e: Exception) {
+                emit(Resource.complete(null))
+                emit(Resource.error(e.message, null))
+            }
+
 
         }
     }
 
     fun rateMovie(movieId: Int, ratingValue: Float): LiveData<Resource<RateResponse>> {
         return liveData {
-            emit(Resource.loading(null))
 
+            emit(Resource.loading(null))
 
             if (sessionRepository.isExpired()) {
                 val sessionResult = moviesApis.generateGuestSession(apiKey = API_KEY)
@@ -97,19 +124,27 @@ class MoviesRepository @Inject constructor(
                     sessionRepository.saveGuestSession(sessionResult.body()?.guestSessionId)
             }
 
-            val result = moviesApis.rateMovie(
-                movieId = movieId,
-                apiKey = API_KEY,
-                guestSessionId = sessionRepository.getGuestSession() ?: "",
-                rateRequest = RateRequest(ratingValue)
-            )
+            try {
 
-            emit(Resource.complete(null))
+                val result = moviesApis.rateMovie(
+                    movieId = movieId,
+                    apiKey = API_KEY,
+                    guestSessionId = sessionRepository.getGuestSession() ?: "",
+                    rateRequest = RateRequest(ratingValue)
+                )
 
-            if (result.isSuccessful)
-                emit(Resource.success(result.body()))
-            else
-                emit(Resource.error(result.message(), null))
+                emit(Resource.complete(null))
+
+                if (result.isSuccessful)
+                    emit(Resource.success(result.body()))
+                else
+                    emit(Resource.error(result.message(), null))
+
+            } catch (e: Exception) {
+                emit(Resource.complete(null))
+                emit(Resource.error(e.message, null))
+            }
+
         }
     }
 
