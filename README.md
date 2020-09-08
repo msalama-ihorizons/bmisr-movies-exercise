@@ -77,4 +77,13 @@ Once app is open for the first time, Now Playing Movies list will be loaded from
 When user click on movie, app will open details activity for displaying more details about the selected movie and also to show movie's cast, and similar movies. 
 User could click on rating button to rate the movie.
 
+# Screen Shots
+![Alt text](/app/shots/1.jpg?raw=true "")
+![Alt text](/app/shots/2.jpg?raw=true "")
+![Alt text](/app/shots/3.jpg?raw=true "")
+![Alt text](/app/shots/3.jpg?raw=true "")
+
+
+
+
 
