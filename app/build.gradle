@@ -119,11 +119,14 @@ dependencies {
     def genericAdapterVersion = '1.0.1'
     implementation "com.leodroidcoder:generic-adapter:$genericAdapterVersion"
 
-    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+    def likeButtonVersion = '0.2.3'
+    implementation "com.github.jd-alexander:LikeButton:$likeButtonVersion"
 
-    implementation 'com.iarcuschin:simpleratingbar:0.1.5'
+    def simpleRatingBarVersion = '0.1.5'
+    implementation "com.iarcuschin:simpleratingbar:$simpleRatingBarVersion"
 
-    implementation 'com.irozon.sneaker:sneaker:2.0.0'
+    def sneakerVersion = '2.0.0'
+    implementation "com.irozon.sneaker:sneaker:$sneakerVersion"
 
     def mock_web_server_version = '4.8.1'
     testImplementation "com.squareup.okhttp3:mockwebserver:$mock_web_server_version"
