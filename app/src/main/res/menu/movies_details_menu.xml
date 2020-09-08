@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_fav"
+        android:id="@+id/action_rate"
         android:orderInCategory="100"
-        android:title="Favourites"
-        android:icon="@drawable/ic_favourite"
+        android:title="Rate"
+        android:icon="@drawable/ic_rate"
         app:showAsAction="always" />
 
 

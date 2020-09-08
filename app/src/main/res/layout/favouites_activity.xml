@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/favourites_fragment"
-        android:name="com.tiendito.ui.favourites.FavouritesMoviesFragment"
+        android:name="com.tiendito.bmisrmovies.ui.favourites.FavouritesMoviesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/movies_list_fragment"/>

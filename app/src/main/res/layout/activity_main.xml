@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/movies_list_fragment"
-        android:name="com.tiendito.ui.movieslist.MoviesListFragment"
+        android:name="com.tiendito.bmisrmovies.ui.movieslist.MoviesListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/movies_list_fragment"/>
